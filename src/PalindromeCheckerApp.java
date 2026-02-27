@@ -1,24 +1,23 @@
-/**
- * =========================================
- * MAIN CLASS - UseCase1PalindromeApp
- * ==========================================
- */
-
-
 public class PalindromeCheckerApp {
+    public static boolean isPalindrome(String str) {
+        char[] chars = str.toCharArray();
 
-        public static void main(String[] args) {
-            String input = "madam";
-            String reversed = "";
+        int start = 0;
+        int end = chars.length - 1;
 
-            for (int i = input.length() - 1; i >= 0; i--) {
-                reversed = reversed + input.charAt(i);
+        while (start < end) {
+            if (chars[start] != chars[end]) {
+                return false;
             }
-
-            if (input.equals(reversed)) {
-                System.out.println(input + " is a Palindrome.");
-            } else {
-                System.out.println(input + " is NOT a Palindrome.");
-            }
+            start++;
+            end--;
         }
+
+        return true;
     }
+
+    public static void main(String[] args) {
+        String input = "radar";
+        System.out.println(isPalindrome(input));
+    }
+}
