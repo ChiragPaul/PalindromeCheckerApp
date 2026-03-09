@@ -1,27 +1,47 @@
+import java.util.Scanner;
+
+class PalindromeChecker {
+
+    public boolean checkPalindrome(String input) {
+
+        input = input.replaceAll("\\s+", "").toLowerCase();
+
+        char[] stack = new char[input.length()];
+        int top = -1;
+
+        for (int i = 0; i < input.length(); i++) {
+            stack[++top] = input.charAt(i);
+        }
+
+        for (int i = 0; i < input.length(); i++) {
+            char popped = stack[top--];
+            if (input.charAt(i) != popped) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        String input = "A man a plan a canal Panama";
+        Scanner scanner = new Scanner(System.in);
+        PalindromeChecker checker = new PalindromeChecker();
 
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
 
-        boolean isPalindrome = true;
+        boolean result = checker.checkPalindrome(input);
 
-        int start = 0;
-        int end = normalized.length() - 1;
-
-        while (start < end) {
-            if (normalized.charAt(start) != normalized.charAt(end)) {
-                isPalindrome = false;
-                break;
-            }
-            start++;
-            end--;
+        if (result) {
+            System.out.println("The given string is a Palindrome.");
+        } else {
+            System.out.println("The given string is NOT a Palindrome.");
         }
 
-        System.out.println("Input : " + input);
-        System.out.println("Normalized : " + normalized);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+        scanner.close();
     }
 }
