@@ -1,21 +1,25 @@
-import java.util.Scanner;
+import java.util.*;
 
-class PalindromeChecker {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean checkPalindrome(String input);
+}
+
+// Stack Strategy Implementation
+class StackStrategy implements PalindromeStrategy {
 
     public boolean checkPalindrome(String input) {
 
         input = input.replaceAll("\\s+", "").toLowerCase();
 
-        char[] stack = new char[input.length()];
-        int top = -1;
+        Stack<Character> stack = new Stack<>();
 
-        for (int i = 0; i < input.length(); i++) {
-            stack[++top] = input.charAt(i);
+        for (char c : input.toCharArray()) {
+            stack.push(c);
         }
 
-        for (int i = 0; i < input.length(); i++) {
-            char popped = stack[top--];
-            if (input.charAt(i) != popped) {
+        for (char c : input.toCharArray()) {
+            if (c != stack.pop()) {
                 return false;
             }
         }
@@ -24,6 +28,44 @@ class PalindromeChecker {
     }
 }
 
+// Deque Strategy Implementation
+class DequeStrategy implements PalindromeStrategy {
+
+    public boolean checkPalindrome(String input) {
+
+        input = input.replaceAll("\\s+", "").toLowerCase();
+
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char c : input.toCharArray()) {
+            deque.addLast(c);
+        }
+
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// Context Class
+class PalindromeChecker {
+
+    private PalindromeStrategy strategy;
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean check(String input) {
+        return strategy.checkPalindrome(input);
+    }
+}
+
+// Main Application
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
@@ -34,7 +76,19 @@ public class PalindromeCheckerApp {
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        boolean result = checker.checkPalindrome(input);
+        System.out.println("Choose Strategy:");
+        System.out.println("1. Stack Strategy");
+        System.out.println("2. Deque Strategy");
+
+        int choice = scanner.nextInt();
+
+        if (choice == 1) {
+            checker.setStrategy(new StackStrategy());
+        } else {
+            checker.setStrategy(new DequeStrategy());
+        }
+
+        boolean result = checker.check(input);
 
         if (result) {
             System.out.println("The given string is a Palindrome.");
